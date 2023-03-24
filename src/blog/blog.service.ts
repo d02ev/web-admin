@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { LogType } from 'src/transaction/enum';
@@ -23,7 +27,21 @@ export class BlogService {
       LogType.CREATE,
     );
 
-    return { blog, transaction };
+    if (!blog) {
+      throw new InternalServerErrorException(
+        'Blog Cannot Be Created Due To An Unknown Error!',
+      );
+    }
+    if (!transaction) {
+      throw new InternalServerErrorException(
+        'Transaction Cannot Be Created Due to An Unknown Error!',
+      );
+    }
+
+    return {
+      status: 201,
+      message: 'Blog Created Successfully!',
+    };
   }
 
   public async getAllBlogs(): Promise<Blog[] | any | null> {
@@ -69,7 +87,21 @@ export class BlogService {
     );
     const updatedBlog$ = await blog$.update(modificationData).exec();
 
-    return { transaction$, updatedBlog$ };
+    if (!updatedBlog$) {
+      throw new InternalServerErrorException(
+        'Blog Cannot Be Updated Due To An Unknown Error!',
+      );
+    }
+    if (!transaction$) {
+      throw new InternalServerErrorException(
+        'Transaction Cannot Be Created Due To An Unknown Error!',
+      );
+    }
+
+    return {
+      status: 200,
+      message: 'Blog Updated Successfully!',
+    };
   }
 
   public async deleteBlog(
@@ -89,6 +121,20 @@ export class BlogService {
     );
     const deletedBlog$ = await blog$.delete();
 
-    return { transaction$, deletedBlog$ };
+    if (!deletedBlog$) {
+      throw new InternalServerErrorException(
+        'Blog Cannot Be Deleted Due To An Unknown Error!',
+      );
+    }
+    if (!transaction$) {
+      throw new InternalServerErrorException(
+        'Transaction Cannot Be Created Due To An Unknown Error!',
+      );
+    }
+
+    return {
+      status: 200,
+      message: 'Blog Deleted Successfully!',
+    };
   }
 }

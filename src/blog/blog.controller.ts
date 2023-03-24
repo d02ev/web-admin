@@ -7,6 +7,8 @@ import {
   Delete,
   Param,
   Patch,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { AuthenticatedGuard } from 'src/auth/guards';
@@ -44,6 +46,7 @@ export class BlogController {
     return await this._blogService.getBlogsByUser(userId);
   }
 
+  @HttpCode(HttpStatus.OK)
   @UseGuards(AuthenticatedGuard)
   @UseRole(Role.USER)
   @Patch(':blogId')
