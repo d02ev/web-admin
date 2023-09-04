@@ -49,5 +49,6 @@ DotEnv.config();
       useClass: RolesGuard,
     },
   ],
+  exports: [AppService],
 })
 export class AppModule {}
