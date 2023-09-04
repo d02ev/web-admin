@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller('/')
+@Controller('https://web-admin-app.onrender.com/')
 export class AppController {
   constructor(private readonly _appService: AppService) {}
 
